@@ -1,0 +1,7 @@
+#+title: TODO
+
+
+* TODO Finish Doom Setup
+** TODO Org
+** TODO Keybinds
+** TODO Doom Theme
