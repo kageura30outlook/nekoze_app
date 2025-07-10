@@ -39,14 +39,7 @@ def draw_landmarks_on_image(rgb_image, detection_result):
 cap = cv2.VideoCapture(0)  # 0 = 内蔵カメラ（外部なら 1 などに変える）
 
 frame_count = 0  # Add this before the while loop
-import cv2
-import numpy as np
-import mediapipe as mp
-import time
-from mediapipe.tasks import python
-from mediapipe.tasks.python import vision
-from mediapipe import solutions
-from mediapipe.framework.formats import landmark_pb2
+
 
 # === SETUP ===
 model_path = '/Users/Kageura/Documents/nekoze_app/pose_landmarker_lite.task'
