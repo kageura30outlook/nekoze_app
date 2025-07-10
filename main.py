@@ -120,7 +120,6 @@ while True:
                 left_dist = ((lx - lsx)**2 + (ly - lsy)**2)**0.5
                 right_dist = ((rx - rsx)**2 + (ry - rsy)**2)**0.5
 
-                print(f"👁️➡️👕 Left: {left_dist:.2f}px | Right: {right_dist:.2f}px")
 
                 if left_dist < 520 or right_dist < 520:
                     warning_img = cv2.imread("/Users/Kageura/Documents/nekoze_app/nekozedayo.png")
