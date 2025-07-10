@@ -8,6 +8,3 @@ wheels/
 
 # Virtual environments
 .venv
-.annoated_output.mp4
-.terminal_test.py
-uv.lock
