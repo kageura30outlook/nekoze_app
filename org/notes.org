@@ -1,3 +1,0 @@
-#+title: Notes
-** This is my first note in Org!
-Yay!
