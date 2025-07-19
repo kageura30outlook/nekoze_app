@@ -29,3 +29,6 @@ six==1.17.0
 somepackage==1.2.3
 sounddevice==0.5.2
 zipp==3.23.0
+streamlit
+opencv-python-headless
+mediapipe
