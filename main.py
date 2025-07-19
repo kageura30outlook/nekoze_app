@@ -14,7 +14,7 @@ nose_dist = 125
 frame_count = 0
 
 # === SETUP ===
-model_path = '/Users/Kageura/Documents/nekoze_app/models/pose_landmarker_lite.task'
+model_path = './models/pose_landmarker_lite.task'
 base_options = python.BaseOptions(model_asset_path=model_path)
 options = vision.PoseLandmarkerOptions(
     base_options=base_options,
@@ -73,7 +73,7 @@ if first == 0:
 
         nose_dist = ((nx - mx) ** 2 + (ny - my) ** 2) ** 0.5
         p1_nose_dist = nose_dist
-        print('Your baseline nose-shoulder distance is:', math.floor(p1_nose_dist))
+        #print('Your baseline nose-shoulder distance is:', math.floor(p1_nose_dist))
 
 # === MAIN CAMERA LOOP ===
 cap = cv2.VideoCapture(0)
@@ -119,7 +119,7 @@ while True:
                 nose_dist = ((nx - mx) ** 2 + (ny - my) ** 2) ** 0.5
 
                 if nose_dist < p1_nose_dist:
-                    warning_img = cv2.imread("/Users/Kageura/Documents/nekoze_app/materials/nekozedayo.png")
+                    warning_img = cv2.imread("./materials/nekozedayo.png")
                     if warning_img is not None:
                         cv2.imshow("Posture Warning!", warning_img)
                     CHECK_INTERVAL = 2
@@ -127,7 +127,7 @@ while True:
                     CHECK_INTERVAL = 3
                     cv2.destroyWindow("Posture Warning!")
 
-                print("👃 Distance:", math.floor(nose_dist))
+                #print("Distance:", math.floor(nose_dist))
 
             except IndexError:
                 print("⚠️ ランドマークの読み取りに失敗しました")
