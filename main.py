@@ -41,7 +41,7 @@ def draw_landmarks_on_image(rgb_image, detection_result):
     return annotated_image
 
 # === INITIAL BAD POSTURE CAPTURE ===
-if st.button('Take photo of bad posture.(Default would be 126)'):
+if st.button('Take photo of bad posture(Default would be 126)'):
     for i in range(10):
         print('Taking photo of bad posture in', i)
         time.sleep(1)
@@ -76,67 +76,68 @@ if st.button('Take photo of bad posture.(Default would be 126)'):
         p1_nose_dist = nose_dist
         print('Your baseline nose-shoulder distance is:', math.floor(p1_nose_dist))
 
-# === MAIN CAMERA LOOP ===
-cap = cv2.VideoCapture(0)
-last_check = time.time()
-CHECK_INTERVAL = 1  # seconds
+if st.button('Start nekoze checker?'):
+    # === MAIN CAMERA LOOP ===
+    cap = cv2.VideoCapture(0)
+    last_check = time.time()
+    CHECK_INTERVAL = 1  # seconds
 
-print("📸 カメラ起動中。1秒ごとに姿勢チェックします。")
+    print("📸 カメラ起動中。1秒ごとに姿勢チェックします。")
 
-while True:
-    ret, frame = cap.read()
-    if not ret:
-        print("⚠️ フレームが取得できませんでした")
-        break
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            print("⚠️ フレームが取得できませんでした")
+            break
 
-    rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_frame)
+        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_frame)
 
-    current_time = time.time()
-    detection_result = None
-    annotated_frame = frame.copy()
+        current_time = time.time()
+        detection_result = None
+        annotated_frame = frame.copy()
 
-    if current_time - last_check >= CHECK_INTERVAL:
-        last_check = current_time
-        detection_result = detector.detect(mp_image)
-        annotated_frame = draw_landmarks_on_image(rgb_frame, detection_result)
+        if current_time - last_check >= CHECK_INTERVAL:
+            last_check = current_time
+            detection_result = detector.detect(mp_image)
+            annotated_frame = draw_landmarks_on_image(rgb_frame, detection_result)
 
-        pose_landmarks_list = detection_result.pose_landmarks
-        image_height, image_width, _ = frame.shape
+            pose_landmarks_list = detection_result.pose_landmarks
+            image_height, image_width, _ = frame.shape
 
-        if len(pose_landmarks_list) > 0:
-            landmarks = pose_landmarks_list[0]
-            try:
-                nose = landmarks[mp.solutions.pose.PoseLandmark.NOSE]
-                left_shoulder = landmarks[mp.solutions.pose.PoseLandmark.LEFT_SHOULDER]
-                right_shoulder = landmarks[mp.solutions.pose.PoseLandmark.RIGHT_SHOULDER]
+            if len(pose_landmarks_list) > 0:
+                landmarks = pose_landmarks_list[0]
+                try:
+                    nose = landmarks[mp.solutions.pose.PoseLandmark.NOSE]
+                    left_shoulder = landmarks[mp.solutions.pose.PoseLandmark.LEFT_SHOULDER]
+                    right_shoulder = landmarks[mp.solutions.pose.PoseLandmark.RIGHT_SHOULDER]
 
-                mid_x = (left_shoulder.x + right_shoulder.x) / 2
-                mid_y = (left_shoulder.y + right_shoulder.y) / 2
+                    mid_x = (left_shoulder.x + right_shoulder.x) / 2
+                    mid_y = (left_shoulder.y + right_shoulder.y) / 2
 
-                nx, ny = int(nose.x * image_width), int(nose.y * image_height)
-                mx, my = int(mid_x * image_width), int(mid_y * image_height)
+                    nx, ny = int(nose.x * image_width), int(nose.y * image_height)
+                    mx, my = int(mid_x * image_width), int(mid_y * image_height)
 
-                nose_dist = ((nx - mx) ** 2 + (ny - my) ** 2) ** 0.5
+                    nose_dist = ((nx - mx) ** 2 + (ny - my) ** 2) ** 0.5
 
-                if nose_dist < p1_nose_dist:
-                    warning_img = cv2.imread("/Users/Kageura/Documents/nekoze_app/nekozedayo.png")
-                    if warning_img is not None:
-                        cv2.imshow("Posture Warning!", warning_img)
-                    CHECK_INTERVAL = 2
-                elif nose_dist > p1_nose_dist:
-                    CHECK_INTERVAL = 3
-                    cv2.destroyWindow("Posture Warning!")
+                    if nose_dist < p1_nose_dist:
+                        warning_img = cv2.imread("/Users/Kageura/Documents/nekoze_app/nekozedayo.png")
+                        if warning_img is not None:
+                            cv2.imshow("Posture Warning!", warning_img)
+                        CHECK_INTERVAL = 2
+                    elif nose_dist > p1_nose_dist:
+                        CHECK_INTERVAL = 3
+                        cv2.destroyWindow("Posture Warning!")
 
-                print("👃 Distance:", math.floor(nose_dist))
+                    print("👃 Distance:", math.floor(nose_dist))
 
-            except IndexError:
-                print("⚠️ ランドマークの読み取りに失敗しました")
-        else:
-            print("⚠️ ポーズが検出されませんでした")
+                except IndexError:
+                    print("⚠️ ランドマークの読み取りに失敗しました")
+            else:
+                print("⚠️ ポーズが検出されませんでした")
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
-cap.release()
-cv2.destroyAllWindows()
+    cap.release()
+    cv2.destroyAllWindows()
