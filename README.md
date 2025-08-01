@@ -1,7 +1,7 @@
 # What this app does
 This is a python app that checks if you are nekoze(have a bad posture) or not. If the code thinks you are nekoze, the code will show an image alerting you that you are nekoze. After the alert comes up you have to make your posture better(straighten your back). After 2 seconds with a good posture, the image goes away.
 # How to use the app step by step
-After you clone the repository, type in the following in terminal:
+After you clone the repository, type in the following in terminal:(You need uv for this app)
 ```bash
 uv sync
 ```
